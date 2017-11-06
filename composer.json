@@ -9,6 +9,18 @@
             "email": "529265776@qq.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^6.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dzgrief\\Bce\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dzgrief\\Bce\\Tests\\": "tests/"
+        }
+    }
 }
