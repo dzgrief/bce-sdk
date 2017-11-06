@@ -9,7 +9,9 @@
             "email": "529265776@qq.com"
         }
     ],
-    "require": {},
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
     "require-dev": {
         "phpunit/phpunit": "^6.4"
     },
