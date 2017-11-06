@@ -1,0 +1,14 @@
+{
+    "name": "dzgrief/bce-sdk",
+    "description": "Baidu Cloud SDK for PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "dzgrief",
+            "email": "529265776@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
