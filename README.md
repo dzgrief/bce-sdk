@@ -1,5 +1,9 @@
 <h1 align="center">Baidu Cloud SDK for PHP</h1>
 
+## 要求
+
+- PHP >= 7.0
+
 ## 安装
 
 ```shell
