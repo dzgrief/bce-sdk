@@ -26,9 +26,10 @@ class BaseClient
      * @param  string $body
      * @param  array  $parameters
      * @param  array  $headers
-     * @return array
+     * @param  array  $options
+     * @return array|\GuzzleHttp\Psr7\Stream
      */
-    public function request($method, $host, $uri, $body = '', $parameters = [], $headers = [])
+    public function request($method, $host, $uri, $body = '', $parameters = [], $headers = [], $options = [])
     {
         $method = strtoupper($method);
         $body = is_array($body) ? json_encode($body, JSON_FORCE_OBJECT) : $body;
@@ -36,16 +37,22 @@ class BaseClient
         $headers['x-bce-date'] = $timestamp;
         $headers['host'] = $host;
         $headers['content-length'] = strlen($body);
-        $headers['content-type'] = 'application/json; charset=UTF-8';
+        $headers['content-type'] = HttpContentTypes::JSON;
         $headers['authorization'] = $this->signer->sign($method, $uri, $parameters, $headers);
 
-        $response = $this->http_client->request($method, 'https://' . $host . $uri, [
+        $options = array_merge([
             'headers'  => $headers,
             'body'     => $body,
             'query'    => $parameters,
-        ]);
+        ], $options);
 
-        return json_decode($response->getBody()->getContents(), true);
+        $response = $this->http_client->request($method, 'https://' . $host . $uri, $options);
+
+        if (in_array(HttpContentTypes::JSON, $response->getHeader('Content-Type'))) {
+            return json_decode($response->getBody()->getContents(), true);
+        }
+
+        return $response->getBody();
     }
 
     /**
