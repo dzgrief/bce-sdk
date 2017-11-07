@@ -12,7 +12,7 @@ class TsdbClient extends BaseClient
 
     protected $db_name;
 
-    public function __construct(SignerInterface $signer, ClientInterface $http_client, $db_name)
+    public function __construct(SignerInterface $signer, $db_name, ClientInterface $http_client = null)
     {
         parent::__construct($signer, $http_client);
 

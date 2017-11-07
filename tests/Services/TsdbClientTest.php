@@ -119,8 +119,8 @@ class TsdbClientTest extends TestCase
 
         return new TsdbClient(
             $this->getMockSigner(),
-            $this->getMockHttpClient($status, $body, $headers),
-            'test'
+            'test',
+            $this->getMockHttpClient($status, $body, $headers)
         );
     }
 }

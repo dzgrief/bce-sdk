@@ -8,7 +8,7 @@ class Signer implements SignerInterface
     protected $secret_access_key;
     protected $expiration_period_in_seconds;
 
-    public function __construct($access_key_id, $secret_access_key, $expiration_period_in_seconds)
+    public function __construct($access_key_id, $secret_access_key, $expiration_period_in_seconds = 1800)
     {
         $this->access_key_id = $access_key_id;
         $this->secret_access_key = $secret_access_key;
