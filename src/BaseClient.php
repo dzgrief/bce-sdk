@@ -4,18 +4,17 @@ namespace Dzgrief\Bce;
 
 use DateTime;
 use DateTimeZone;
-use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\ClientInterface;
 
-class BaseClient
+class BaseClient extends SimpleHttpClient
 {
     protected $signer;
-    protected $http_client;
 
     public function __construct(SignerInterface $signer, ClientInterface $http_client = null)
     {
+        parent::__construct($http_client);
+
         $this->signer = $signer;
-        $this->http_client = $http_client ?: new HttpClient();
     }
 
     /**
@@ -47,18 +46,7 @@ class BaseClient
             'query'    => $parameters,
         ], $options);
 
-        $response = $this->http_client->request($method, 'https://' . $host . $uri, $options);
-        $content_types = $response->getHeader('Content-Type');
-
-        foreach ($content_types as $key => $content_type) {
-            $content_types[$key] = strtolower(str_replace(' ', '', $content_type));
-        }
-
-        if (in_array(HttpContentTypes::JSON, $content_types)) {
-            return json_decode($response->getBody()->getContents(), true);
-        }
-
-        return $response->getBody();
+        return parent::request($method, $host, $uri, $options);
     }
 
     /**

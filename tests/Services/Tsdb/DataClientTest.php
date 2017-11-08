@@ -4,10 +4,7 @@ namespace Dzgrief\Bce\Tests\Services\Tsdb;
 
 use Dzgrief\Bce\HttpContentTypes;
 use Dzgrief\Bce\Services\Tsdb\DataClient;
-use Dzgrief\Bce\Signer;
 use Dzgrief\Bce\Tests\Traits\Mockable;
-use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 class DataClientTest extends TestCase
