@@ -4,6 +4,8 @@ namespace Dzgrief\Bce;
 
 class Signer implements SignerInterface
 {
+    const VERSION = 'v1';
+
     protected $access_key_id;
     protected $secret_access_key;
     protected $expiration_period_in_seconds;
@@ -27,24 +29,11 @@ class Signer implements SignerInterface
     public function sign($method, $uri, $parameters, $headers)
     {
         $timestamp = $headers['x-bce-date'];
-        $version = $this->getVersion($uri);
-        $auth_string_prefix = "bce-auth-v{$version}/{$this->access_key_id}/{$timestamp}/{$this->expiration_period_in_seconds}";
+        $version = self::VERSION;
+        $auth_string_prefix = "bce-auth-{$version}/{$this->access_key_id}/{$timestamp}/{$this->expiration_period_in_seconds}";
         $signature = $this->getSignature($method, $uri, $parameters, $headers, $auth_string_prefix);
 
         return "{$auth_string_prefix}//{$signature}";
-    }
-
-    /**
-     * 根据资源标识符获取接口版本
-     *
-     * @param  string $uri
-     * @return string
-     */
-    protected function getVersion($uri)
-    {
-        preg_match('/^\/v(\d+)\//', $uri, $matches);
-
-        return $matches[1] ?? '1';
     }
 
     /**
