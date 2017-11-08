@@ -17,7 +17,7 @@ $ composer require "dzgrief/bce-sdk"
 ## 使用
 
 ```php
-use Dzgrief\Bce\Services\TsdbClient;
+use Dzgrief\Bce\Services\Tsdb\DataClient;
 use Dzgrief\Bce\Signer;
 
 $access_key_id = 'xxxxxx';
@@ -25,10 +25,10 @@ $secret_access_key = 'xxxxxx';
 $tsdb_name = 'xxx';
 
 $signer = new Signer($access_key_id, $secret_access_key);
-$tsdb_client = new TsdbClient($signer, $tsdb_name);
+$data_client = new DataClient($signer, $tsdb_name);
 
 // 写入数据点
-$tsdb_client->setDataPoints([
+$data_client->setDataPoints([
     [
         'metric' => 'chlorine',
         'field' => 'value',
@@ -52,7 +52,7 @@ $tsdb_client->setDataPoints([
 ]);
 
 // 获取标签列表
-$tags = $tsdb_client->getTags('chlorine');
+$tags = $data_client->getTags('chlorine');
 var_dump($tags);
 
 ```
@@ -69,21 +69,21 @@ var_dump($tags);
 -  时序数据库 TSDB 数据接口
 
 ```php
-$tsdb_client = new \Dzgrief\Bce\Services\TsdbClient($signer, $tsdb_name);
-$tsdb_client->setDataPoints($datapoints);
-$tsdb_client->getMetrics();
-$tsdb_client->getTags($metric, $parameters = []);
-$tsdb_client->getDataPoints($parameters = []);
-$tsdb_client->getFields($metric);
-$tsdb_client->export($path = '', $parameters = []);
+$data_client = new \Dzgrief\Bce\Services\Tsdb\DataClient($signer, $tsdb_name);
+$data_client->setDataPoints($datapoints);
+$data_client->getMetrics();
+$data_client->getTags($metric, $parameters = []);
+$data_client->getDataPoints($parameters = []);
+$data_client->getFields($metric);
+$data_client->export($path = '', $parameters = []);
 ```
 
 - 时序数据库 TSDB 管理接口
 
 ```php
-$tsdb_management_client = new \Dzgrief\Bce\Services\TsdbManagementClient($signer);
-$tsdb_management_client->getDatabase($id);
-$tsdb_management_client->getDatabases();
+$management_client = new \Dzgrief\Bce\Services\Tsdb\ManagementClient($signer);
+$management_client->getDatabase($id);
+$management_client->getDatabases();
 ```
    
 - 详细参数参考

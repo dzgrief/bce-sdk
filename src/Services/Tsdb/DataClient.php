@@ -1,12 +1,12 @@
 <?php
 
-namespace Dzgrief\Bce\Services;
+namespace Dzgrief\Bce\Services\Tsdb;
 
 use Dzgrief\Bce\BaseClient;
 use Dzgrief\Bce\SignerInterface;
 use GuzzleHttp\ClientInterface;
 
-class TsdbClient extends BaseClient
+class DataClient extends BaseClient
 {
     const SERVICE_HOST = 'tsdb.iot.gz.baidubce.com';
 

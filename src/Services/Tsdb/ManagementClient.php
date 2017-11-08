@@ -1,10 +1,10 @@
 <?php
 
-namespace Dzgrief\Bce\Services;
+namespace Dzgrief\Bce\Services\Tsdb;
 
 use Dzgrief\Bce\BaseClient;
 
-class TsdbManagementClient extends BaseClient
+class ManagementClient extends BaseClient
 {
     const SERVICE_HOST = 'tsdb.gz.baidubce.com';
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Dzgrief\Bce\Tests\Service;
+namespace Dzgrief\Bce\Tests\Services\Tsdb;
 
-use Dzgrief\Bce\Services\TsdbManagementClient;
+use Dzgrief\Bce\Services\Tsdb\ManagementClient;
 use Dzgrief\Bce\Tests\Traits\Mockable;
 use PHPUnit\Framework\TestCase;
 
-class TsdbManagementClientTest extends TestCase
+class ManagementClientTest extends TestCase
 {
     use Mockable;
 
@@ -24,9 +24,9 @@ class TsdbManagementClientTest extends TestCase
             'createTime'   => '2017-11-30T01:59:13Z',
         ];
 
-        $tsdb_management_client = $this->getTsdbManagementClient(compact('body'));
+        $management_client = $this->getManagementClient(compact('body'));
 
-        parent::assertArraySubset($body, $tsdb_management_client->getDatabase('testid'));
+        parent::assertArraySubset($body, $management_client->getDatabase('testid'));
     }
 
     public function testGetDatabases()
@@ -45,12 +45,12 @@ class TsdbManagementClientTest extends TestCase
             ],
         ];
 
-        $tsdb_management_client = $this->getTsdbManagementClient(compact('body'));
+        $management_client = $this->getManagementClient(compact('body'));
 
-        parent::assertArraySubset($body, $tsdb_management_client->getDatabases());
+        parent::assertArraySubset($body, $management_client->getDatabases());
     }
 
-    private function getTsdbManagementClient($response_options = [])
+    private function getManagementClient($response_options = [])
     {
         if (isset($response_options['body'])) {
             if (is_array($response_options['body'])) {
@@ -62,7 +62,7 @@ class TsdbManagementClientTest extends TestCase
             $body = null;
         }
 
-        return new TsdbManagementClient(
+        return new ManagementClient(
             $this->getMockSigner(),
             $this->getMockHttpClient(200, $body)
         );

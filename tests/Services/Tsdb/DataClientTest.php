@@ -1,24 +1,24 @@
 <?php
 
-namespace Dzgrief\Bce\Tests;
+namespace Dzgrief\Bce\Tests\Services\Tsdb;
 
 use Dzgrief\Bce\HttpContentTypes;
-use Dzgrief\Bce\Services\TsdbClient;
+use Dzgrief\Bce\Services\Tsdb\DataClient;
 use Dzgrief\Bce\Signer;
 use Dzgrief\Bce\Tests\Traits\Mockable;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
-class TsdbClientTest extends TestCase
+class DataClientTest extends TestCase
 {
     use Mockable;
 
     public function testSetDataPoints()
     {
-        $tsdb_client = $this->getTsdbClient(['status' => 201]);
+        $data_client = $this->getDataClient(['status' => 201]);
 
-        parent::assertNull($tsdb_client->setDataPoints([
+        parent::assertNull($data_client->setDataPoints([
             [
                 'metric' => 'chlorine',
                 'field' => 'value',
@@ -35,17 +35,17 @@ class TsdbClientTest extends TestCase
     public function testGetMetrics()
     {
         $body = ['metrics' => ['chlorine', 'degree']];
-        $tsdb_client = $this->getTsdbClient(compact('body'));
+        $data_client = $this->getDataClient(compact('body'));
 
-        parent::assertArraySubset($body, $tsdb_client->getMetrics());
+        parent::assertArraySubset($body, $data_client->getMetrics());
     }
 
     public function testGetTags()
     {
         $body = ['tags' => ['rack' => ['rack1', 'rack2']]];
-        $tsdb_client = $this->getTsdbClient(compact('body'));
+        $data_client = $this->getDataClient(compact('body'));
 
-        parent::assertArraySubset($body, $tsdb_client->getTags('chlorine'));
+        parent::assertArraySubset($body, $data_client->getTags('chlorine'));
     }
 
     public function testGetDataPoints()
@@ -68,9 +68,9 @@ class TsdbClientTest extends TestCase
             ],
         ];
 
-        $tsdb_client = $this->getTsdbClient(compact('body'));
+        $data_client = $this->getDataClient(compact('body'));
 
-        parent::assertArraySubset($body, $tsdb_client->getDataPoints([
+        parent::assertArraySubset($body, $data_client->getDataPoints([
             'metric' => 'chlorine',
             'field' => 'value',
             'filters' => [
@@ -83,18 +83,18 @@ class TsdbClientTest extends TestCase
     public function testGetFields()
     {
         $body = ['fields' => ['value' => ['type' => 'Number']]];
-        $tsdb_client = $this->getTsdbClient(compact('body'));
+        $data_client = $this->getDataClient(compact('body'));
 
-        parent::assertArraySubset($body, $tsdb_client->getFields('chlorine'));
+        parent::assertArraySubset($body, $data_client->getFields('chlorine'));
     }
 
     public function testExport()
     {
         $body = 'timestamp,chlorine\n1509418134240,0.44\n1509418148956,0.45';
         $headers['content-type'] = HttpContentTypes::CSV;
-        $tsdb_client = $this->getTsdbClient(compact('body', 'headers'));
+        $data_client = $this->getDataClient(compact('body', 'headers'));
 
-        parent::assertSame($body, $tsdb_client->export('', [
+        parent::assertSame($body, $data_client->export('', [
             'metrics' => ['chlorine'],
             'filters' => [
                 'start' => 0,
@@ -102,7 +102,7 @@ class TsdbClientTest extends TestCase
         ]));
     }
 
-    private function getTsdbClient($response_options = [])
+    private function getDataClient($response_options = [])
     {
         $status = $response_options['status'] ?? 200;
         $headers = $response_options['headers'] ?? [];
@@ -117,7 +117,7 @@ class TsdbClientTest extends TestCase
             $body = null;
         }
 
-        return new TsdbClient(
+        return new DataClient(
             $this->getMockSigner(),
             'test',
             $this->getMockHttpClient($status, $body, $headers)
