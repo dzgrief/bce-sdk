@@ -2,6 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/dzgrief/bce-sdk/v/stable)](https://packagist.org/packages/dzgrief/bce-sdk)
 [![Build Status](https://travis-ci.org/dzgrief/bce-sdk.svg?branch=master)](https://travis-ci.org/dzgrief/bce-sdk)
+[![Coverage Status](https://coveralls.io/repos/github/dzgrief/bce-sdk/badge.svg?branch=master)](https://coveralls.io/github/dzgrief/bce-sdk?branch=master)
 [![License](https://poser.pugx.org/dzgrief/bce-sdk/license)](https://packagist.org/packages/dzgrief/bce-sdk)
 
 ## 要求

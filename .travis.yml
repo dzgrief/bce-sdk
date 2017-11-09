@@ -13,8 +13,13 @@ install:
 notifications:
   email:
     recipients:
-      - 529265776@qq.com
+        - 529265776@qq.com
     on_success: change
     on_failure: always
 
-script: vendor/bin/phpunit -c phpunit.xml.dist --coverage-text
+script:
+    - mkdir -p build/logs
+    - php vendor/bin/phpunit -c phpunit.xml.dist
+
+after_script:
+    - travis_retry php vendor/bin/coveralls -v
