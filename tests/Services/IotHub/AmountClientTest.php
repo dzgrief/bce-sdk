@@ -17,7 +17,7 @@ class AmountClientTest extends TestCase
             'publishSent'     => 16,
         ];
 
-        $thing_client = $this->getAmountClient(compact('body'));
+        $thing_client = $this->getClient(AmountClient::class, compact('body'));
 
         parent::assertArraySubset($body, $thing_client->getUsage());
     }
@@ -29,7 +29,7 @@ class AmountClientTest extends TestCase
             'publishSent'     => 3,
         ];
 
-        $thing_client = $this->getAmountClient(compact('body'));
+        $thing_client = $this->getClient(AmountClient::class, compact('body'));
 
         parent::assertArraySubset($body, $thing_client->getUsageByEndpoint('endpoint'));
     }
@@ -55,24 +55,8 @@ class AmountClientTest extends TestCase
             ],
         ];
 
-        $thing_client = $this->getAmountClient(compact('body'));
+        $thing_client = $this->getClient(AmountClient::class, compact('body'));
 
         parent::assertArraySubset($body, $thing_client->getUsageByQuery('endpoint', '2017-01-01', '2017-01-02'));
-    }
-
-    private function getAmountClient($response_options = [])
-    {
-        $status = $response_options['status'] ?? 200;
-
-        if (isset($response_options['body'])) {
-            $body = json_encode($response_options['body']);
-        } else {
-            $body = null;
-        }
-
-        return new AmountClient(
-            $this->getMockSigner(),
-            $this->getMockHttpClient($status, $body)
-        );
     }
 }

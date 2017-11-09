@@ -28,7 +28,7 @@ class ThingClientTest extends TestCase
             'pageNo'     => 1,
         ];
 
-        $thing_client = $this->getThingClient(compact('body'));
+        $thing_client = $this->getClient(ThingClient::class, compact('body'));
 
         parent::assertArraySubset($body, $thing_client->getThings('endpoint'));
     }
@@ -42,7 +42,7 @@ class ThingClientTest extends TestCase
             'createTime'   => '2017-10-23T07:13:26Z',
         ];
 
-        $thing_client = $this->getThingClient(compact('body'));
+        $thing_client = $this->getClient(ThingClient::class, compact('body'));
 
         parent::assertArraySubset($body, $thing_client->getThing('endpoint', 'thing'));
     }
@@ -56,31 +56,15 @@ class ThingClientTest extends TestCase
             'createTime'   => '2017-10-23T07:13:26Z',
         ];
 
-        $thing_client = $this->getThingClient(['status' => 201, 'body' => $body]);
+        $thing_client = $this->getClient(ThingClient::class, ['status' => 201, 'body' => $body]);
 
         parent::assertArraySubset($body, $thing_client->setThing('endpoint', 'thing'));
     }
 
     public function testUnsetThing()
     {
-        $thing_client = $this->getThingClient(['status' => 204]);
+        $thing_client = $this->getClient(ThingClient::class, ['status' => 204]);
 
         parent::assertNull($thing_client->unsetThing('endpoint', 'thing'));
-    }
-
-    private function getThingClient($response_options = [])
-    {
-        $status = $response_options['status'] ?? 200;
-
-        if (isset($response_options['body'])) {
-            $body = json_encode($response_options['body']);
-        } else {
-            $body = null;
-        }
-
-        return new ThingClient(
-            $this->getMockSigner(),
-            $this->getMockHttpClient($status, $body)
-        );
     }
 }

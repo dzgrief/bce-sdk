@@ -4,7 +4,6 @@ namespace Dzgrief\Bce\Services\IotHub;
 
 use Dzgrief\Bce\HttpContentTypes;
 use Dzgrief\Bce\SimpleHttpClient;
-use GuzzleHttp\ClientInterface;
 
 class MqttClient extends SimpleHttpClient
 {
@@ -13,9 +12,9 @@ class MqttClient extends SimpleHttpClient
     protected $username;
     protected $password;
 
-    public function __construct($username, $password, ClientInterface $http_client = null)
+    public function __construct($username, $password)
     {
-        parent::__construct($http_client);
+        parent::__construct();
 
         $this->username = $username;
         $this->password = $password;

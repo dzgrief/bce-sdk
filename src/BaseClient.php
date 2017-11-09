@@ -4,15 +4,14 @@ namespace Dzgrief\Bce;
 
 use DateTime;
 use DateTimeZone;
-use GuzzleHttp\ClientInterface;
 
 class BaseClient extends SimpleHttpClient
 {
     protected $signer;
 
-    public function __construct(SignerInterface $signer, ClientInterface $http_client = null)
+    public function __construct(SignerInterface $signer)
     {
-        parent::__construct($http_client);
+        parent::__construct();
 
         $this->signer = $signer;
     }

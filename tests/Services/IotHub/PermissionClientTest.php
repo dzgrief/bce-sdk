@@ -29,7 +29,7 @@ class PermissionClientTest extends TestCase
             'pageNo'     => 1,
         ];
 
-        $permission_client = $this->getPermissionClient(compact('body'));
+        $permission_client = $this->getClient(PermissionClient::class, compact('body'));
 
         parent::assertArraySubset($body, $permission_client->getPermissions('endpoint', 'policy'));
     }
@@ -44,7 +44,7 @@ class PermissionClientTest extends TestCase
             'permissionUuid' => 'b82f0f31-9d3a-43f2-8d1c-2cbaf27b1ed3',
         ];
 
-        $permission_client = $this->getPermissionClient(compact('body'));
+        $permission_client = $this->getClient(PermissionClient::class, compact('body'));
 
         parent::assertArraySubset($body, $permission_client->getPermission('endpoint', 'b82f0f31-9d3a-43f2-8d1c-2cbaf27b1ed3'));
     }
@@ -59,7 +59,7 @@ class PermissionClientTest extends TestCase
             'permissionUuid' => 'b82f0f31-9d3a-43f2-8d1c-2cbaf27b1ed3',
         ];
 
-        $permission_client = $this->getPermissionClient(['status' => 201, 'body' => $body]);
+        $permission_client = $this->getClient(PermissionClient::class, ['status' => 201, 'body' => $body]);
 
         parent::assertArraySubset($body, $permission_client->setPermission('endpoint', 'policy', ['SUBSCRIBE'], 'topic'));
     }
@@ -74,32 +74,16 @@ class PermissionClientTest extends TestCase
             'permissionUuid' => 'b82f0f31-9d3a-43f2-8d1c-2cbaf27b1ed3',
         ];
 
-        $permission_client = $this->getPermissionClient(['status' => 201, 'body' => $body]);
-        $permission = $permission_client->setPermission('endpoint', 'b82f0f31-9d3a-43f2-8d1c-2cbaf27b1ed3', ['SUBSCRIBE'], 'topic');
+        $permission_client = $this->getClient(PermissionClient::class, ['status' => 201, 'body' => $body]);
+        $permission = $permission_client->updatePermission('endpoint', 'b82f0f31-9d3a-43f2-8d1c-2cbaf27b1ed3', ['SUBSCRIBE'], 'topic');
 
         parent::assertArraySubset($body, $permission);
     }
 
     public function testUnsetPermission()
     {
-        $permission_client = $this->getPermissionClient(['status' => 204]);
+        $permission_client = $this->getClient(PermissionClient::class, ['status' => 204]);
 
         parent::assertNull($permission_client->unsetPermission('endpoint', 'b82f0f31-9d3a-43f2-8d1c-2cbaf27b1ed3'));
-    }
-
-    private function getPermissionClient($response_options = [])
-    {
-        $status = $response_options['status'] ?? 200;
-
-        if (isset($response_options['body'])) {
-            $body = json_encode($response_options['body']);
-        } else {
-            $body = null;
-        }
-
-        return new PermissionClient(
-            $this->getMockSigner(),
-            $this->getMockHttpClient($status, $body)
-        );
     }
 }

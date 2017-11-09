@@ -27,4 +27,27 @@ trait Mockable
 
         return $mock_http_client;
     }
+
+    protected function getClient($class_name, $response_options = [], ...$class_parameters)
+    {
+        $status = $response_options['status'] ?? 200;
+        $headers = $response_options['headers'] ?? [];
+
+        if (isset($response_options['body'])) {
+            if (is_array($response_options['body']) || is_bool($response_options['body'])) {
+                $body = json_encode($response_options['body']);
+            } else {
+                $body = $response_options['body'];
+            }
+        } else {
+            $body = null;
+        }
+
+        $mock_http_client = $this->getMockHttpClient($status, $body, $headers);
+
+        $client = new $class_name($this->getMockSigner(), ...$class_parameters);
+        $client->setHttpClient($mock_http_client);
+
+        return $client;
+    }
 }

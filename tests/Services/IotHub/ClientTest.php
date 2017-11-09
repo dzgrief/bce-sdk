@@ -13,7 +13,7 @@ class ClientTest extends TestCase
     public function testIsOnline()
     {
         $body = false;
-        $thing_client = $this->getClient(compact('body'));
+        $thing_client = $this->getClient(Client::class, compact('body'));
 
         parent::assertSame($body, $thing_client->isOnline('endpoint', 'mqttid1'));
     }
@@ -31,24 +31,8 @@ class ClientTest extends TestCase
             ],
         ];
 
-        $thing_client = $this->getClient(compact('body'));
+        $thing_client = $this->getClient(Client::class, compact('body'));
 
         parent::assertArraySubset($body, $thing_client->isOnlines('endpoint', ['mqttid1', 'mqttid2']));
-    }
-
-    private function getClient($response_options = [])
-    {
-        $status = $response_options['status'] ?? 200;
-
-        if (isset($response_options['body'])) {
-            $body = json_encode($response_options['body']);
-        } else {
-            $body = null;
-        }
-
-        return new Client(
-            $this->getMockSigner(),
-            $this->getMockHttpClient($status, $body)
-        );
     }
 }

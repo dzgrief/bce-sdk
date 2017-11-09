@@ -24,7 +24,7 @@ class ManagementClientTest extends TestCase
             'createTime'   => '2017-11-30T01:59:13Z',
         ];
 
-        $management_client = $this->getManagementClient(compact('body'));
+        $management_client = $this->getClient(ManagementClient::class, compact('body'));
 
         parent::assertArraySubset($body, $management_client->getDatabase('testid'));
     }
@@ -45,27 +45,9 @@ class ManagementClientTest extends TestCase
             ],
         ];
 
-        $management_client = $this->getManagementClient(compact('body'));
+        $management_client = $this->getClient(ManagementClient::class, compact('body'));
 
         parent::assertArraySubset($body, $management_client->getDatabases());
-    }
-
-    private function getManagementClient($response_options = [])
-    {
-        if (isset($response_options['body'])) {
-            if (is_array($response_options['body'])) {
-                $body = json_encode($response_options['body']);
-            } else {
-                $body = $response_options['body'];
-            }
-        } else {
-            $body = null;
-        }
-
-        return new ManagementClient(
-            $this->getMockSigner(),
-            $this->getMockHttpClient(200, $body)
-        );
     }
 }
 

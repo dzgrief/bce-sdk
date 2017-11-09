@@ -25,6 +25,9 @@ class MqttClientTest extends TestCase
         $mock_http_client = parent::createMock(HttpClient::class);
         $mock_http_client->method('request')->willReturn($response);
 
-        return new MqttClient('endpoint/thing', 'bw3qWSy2l1QgiePN3b7beWOVaGoObiR9ZefT70cKnBB=', $mock_http_client);
+        $mqtt_client = new MqttClient('endpoint/thing', 'bw3qWSy2l1QgiePN3b7beWOVaGoObiR9ZefT70cKnBB=');
+        $mqtt_client->setHttpClient($mock_http_client);
+
+        return $mqtt_client;
     }
 }

@@ -27,7 +27,7 @@ class PrincipalClientTest extends TestCase
             'pageNo'     => 1,
         ];
 
-        $principal_client = $this->getPrincipalClient(compact('body'));
+        $principal_client = $this->getClient(PrincipalClient::class, compact('body'));
 
         parent::assertArraySubset($body, $principal_client->getPrincipals('endpoint'));
     }
@@ -40,7 +40,7 @@ class PrincipalClientTest extends TestCase
             'createTime'    => '2017-10-23T07:12:51Z',
         ];
 
-        $principal_client = $this->getPrincipalClient(compact('body'));
+        $principal_client = $this->getClient(PrincipalClient::class, compact('body'));
 
         parent::assertArraySubset($body, $principal_client->getPrincipal('endpoint', 'principal'));
     }
@@ -91,7 +91,7 @@ class PrincipalClientTest extends TestCase
               ""',
         ];
 
-        $principal_client = $this->getPrincipalClient(['status' => 201, 'body' => $body]);
+        $principal_client = $this->getClient(PrincipalClient::class, ['status' => 201, 'body' => $body]);
 
         parent::assertArraySubset($body, $principal_client->setPrincipal('endpoint', 'principal'));
     }
@@ -141,31 +141,15 @@ class PrincipalClientTest extends TestCase
               ""',
         ];
 
-        $principal_client = $this->getPrincipalClient(compact('body'));
+        $principal_client = $this->getClient(PrincipalClient::class, compact('body'));
 
         parent::assertArraySubset($body, $principal_client->resetPassword('endpoint', 'principal'));
     }
 
     public function testUnsetPrincipal()
     {
-        $principal_client = $this->getPrincipalClient(['status' => 204]);
+        $principal_client = $this->getClient(PrincipalClient::class, ['status' => 204]);
 
         parent::assertNull($principal_client->unsetPrincipal('endpoint', 'principal'));
-    }
-
-    private function getPrincipalClient($response_options = [])
-    {
-        $status = $response_options['status'] ?? 200;
-
-        if (isset($response_options['body'])) {
-            $body = json_encode($response_options['body']);
-        } else {
-            $body = null;
-        }
-
-        return new PrincipalClient(
-            $this->getMockSigner(),
-            $this->getMockHttpClient($status, $body)
-        );
     }
 }

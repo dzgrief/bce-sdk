@@ -4,7 +4,6 @@ namespace Dzgrief\Bce\Services\Tsdb;
 
 use Dzgrief\Bce\BaseClient;
 use Dzgrief\Bce\SignerInterface;
-use GuzzleHttp\ClientInterface;
 
 class DataClient extends BaseClient
 {
@@ -12,9 +11,9 @@ class DataClient extends BaseClient
 
     protected $db_name;
 
-    public function __construct(SignerInterface $signer, $db_name, ClientInterface $http_client = null)
+    public function __construct(SignerInterface $signer, $db_name)
     {
-        parent::__construct($signer, $http_client);
+        parent::__construct($signer);
 
         $this->db_name = $db_name;
     }

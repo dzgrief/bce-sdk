@@ -9,9 +9,9 @@ class SimpleHttpClient
 {
     protected $http_client;
 
-    public function __construct(ClientInterface $http_client = null)
+    public function __construct()
     {
-        $this->http_client = $http_client ?: new HttpClient();
+        $this->http_client = new HttpClient();
     }
 
     /**
@@ -38,5 +38,18 @@ class SimpleHttpClient
         }
 
         return $response->getBody();
+    }
+
+    /**
+     * 设置 HttpClient
+     *
+     * @param  \GuzzleHttp\ClientInterface $http_client
+     * @return $this
+     */
+    public function setHttpClient(ClientInterface $http_client)
+    {
+        $this->http_client = $http_client;
+
+        return $this;
     }
 }

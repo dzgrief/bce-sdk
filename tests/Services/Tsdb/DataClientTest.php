@@ -13,7 +13,7 @@ class DataClientTest extends TestCase
 
     public function testSetDataPoints()
     {
-        $data_client = $this->getDataClient(['status' => 201]);
+        $data_client = $this->getClient(DataClient::class, ['status' => 201], 'db_name');
 
         parent::assertNull($data_client->setDataPoints([
             [
@@ -32,7 +32,7 @@ class DataClientTest extends TestCase
     public function testGetMetrics()
     {
         $body = ['metrics' => ['chlorine', 'degree']];
-        $data_client = $this->getDataClient(compact('body'));
+        $data_client = $this->getClient(DataClient::class, compact('body'), 'db_name');
 
         parent::assertArraySubset($body, $data_client->getMetrics());
     }
@@ -40,7 +40,7 @@ class DataClientTest extends TestCase
     public function testGetTags()
     {
         $body = ['tags' => ['rack' => ['rack1', 'rack2']]];
-        $data_client = $this->getDataClient(compact('body'));
+        $data_client = $this->getClient(DataClient::class, compact('body'), 'db_name');
 
         parent::assertArraySubset($body, $data_client->getTags('chlorine'));
     }
@@ -65,7 +65,7 @@ class DataClientTest extends TestCase
             ],
         ];
 
-        $data_client = $this->getDataClient(compact('body'));
+        $data_client = $this->getClient(DataClient::class, compact('body'), 'db_name');
 
         parent::assertArraySubset($body, $data_client->getDataPoints([
             'metric' => 'chlorine',
@@ -80,7 +80,7 @@ class DataClientTest extends TestCase
     public function testGetFields()
     {
         $body = ['fields' => ['value' => ['type' => 'Number']]];
-        $data_client = $this->getDataClient(compact('body'));
+        $data_client = $this->getClient(DataClient::class, compact('body'), 'db_name');
 
         parent::assertArraySubset($body, $data_client->getFields('chlorine'));
     }
@@ -89,35 +89,17 @@ class DataClientTest extends TestCase
     {
         $body = 'timestamp,chlorine\n1509418134240,0.44\n1509418148956,0.45';
         $headers['content-type'] = HttpContentTypes::CSV;
-        $data_client = $this->getDataClient(compact('body', 'headers'));
+        $data_client = $this->getClient(DataClient::class, compact('body', 'headers'), 'db_name');
 
-        parent::assertSame($body, $data_client->export('', [
+        $parameters = [
             'metrics' => ['chlorine'],
             'filters' => [
                 'start' => 0,
             ],
-        ]));
-    }
+        ];
 
-    private function getDataClient($response_options = [])
-    {
-        $status = $response_options['status'] ?? 200;
-        $headers = $response_options['headers'] ?? [];
+        parent::assertSame($body, $data_client->export('', $parameters));
 
-        if (isset($response_options['body'])) {
-            if (is_array($response_options['body'])) {
-                $body = json_encode($response_options['body']);
-            } else {
-                $body = $response_options['body'];
-            }
-        } else {
-            $body = null;
-        }
-
-        return new DataClient(
-            $this->getMockSigner(),
-            'test',
-            $this->getMockHttpClient($status, $body, $headers)
-        );
+        parent::assertNull($data_client->export('path', $parameters));
     }
 }

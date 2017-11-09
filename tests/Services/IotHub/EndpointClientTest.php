@@ -32,7 +32,7 @@ class EndpointClientTest extends TestCase
             'pageNo'     => 1,
         ];
 
-        $endpoint_client = $this->getEndpointClient(compact('body'));
+        $endpoint_client = $this->getClient(EndpointClient::class, compact('body'));
 
         parent::assertArraySubset($body, $endpoint_client->getEndpoints());
     }
@@ -50,7 +50,7 @@ class EndpointClientTest extends TestCase
             'endpointName'      => 'endpoint',
         ];
 
-        $endpoint_client = $this->getEndpointClient(compact('body'));
+        $endpoint_client = $this->getClient(EndpointClient::class, compact('body'));
 
         parent::assertArraySubset($body, $endpoint_client->getEndpoint('endpoint'));
     }
@@ -68,31 +68,15 @@ class EndpointClientTest extends TestCase
             'uuid'              => '3dd66250-38b9-4981-9036-a69f52a16e0c',
         ];
 
-        $endpoint_client = $this->getEndpointClient(['status' => 201, 'body' => $body]);
+        $endpoint_client = $this->getClient(EndpointClient::class, ['status' => 201, 'body' => $body]);
 
         parent::assertArraySubset($body, $endpoint_client->setEndpoint('endpoint'));
     }
 
     public function testUnsetEndpoint()
     {
-        $endpoint_client = $this->getEndpointClient(['status' => 204]);
+        $endpoint_client = $this->getClient(EndpointClient::class, ['status' => 204]);
 
         parent::assertNull($endpoint_client->unsetEndpoint('endpoint'));
-    }
-
-    private function getEndpointClient($response_options = [])
-    {
-        $status = $response_options['status'] ?? 200;
-
-        if (isset($response_options['body'])) {
-            $body = json_encode($response_options['body']);
-        } else {
-            $body = null;
-        }
-
-        return new EndpointClient(
-            $this->getMockSigner(),
-            $this->getMockHttpClient($status, $body)
-        );
     }
 }

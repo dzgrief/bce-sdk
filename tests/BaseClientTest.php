@@ -14,10 +14,9 @@ class BaseClientTest extends TestCase
     {
         $body = ['fields' => ['value' => ['type' => 'Number']]];
 
-        $base_client = new BaseClient(
-            $this->getMockSigner(),
-            $this->getMockHttpClient(200, json_encode($body))
-        );
+        $mock_http_client = $this->getMockHttpClient(200, json_encode($body));
+        $base_client = new BaseClient($this->getMockSigner());
+        $base_client->setHttpClient($mock_http_client);
 
         parent::assertArraySubset($body, $base_client->request('GET', 'test.tsdb.iot.gz.baidubce.com', '/v1/metric'));
     }
