@@ -11,7 +11,7 @@
 ## 安装
 
 ```shell
-$ composer require "dzgrief/bce-sdk"
+$ composer require dzgrief/bce-sdk
 ```
 
 ## 使用
@@ -60,35 +60,144 @@ var_dump($tags);
 ## 支持接口版本
 
 | 产品 | 版本 |
-| :--------: | :--------: |
+| :-------- | :-------- |
 | 时序数据库 TSDB 数据接口 | v1 |
 | 时序数据库 TSDB 管理接口 | v1 |
+| 物接入 IotHub Endpoint 接口 | v1 |
+| 物接入 IotHub Thing 接口 | v1 |
+| 物接入 IotHub Principal 接口 | v1 |
+| 物接入 IotHub Policy 接口 | v1 |
+| 物接入 IotHub Permission 接口 | v1 |
+| 物接入 IotHub 认证接口 | v1 |
+| 物接入 IotHub 动作接口 | v1 |
+| 物接入 IotHub Client 接口 | v2 |
+| 物接入 IotHub MQTT Client 接口 | v1 |
+| 物接入 IotHub 使用量接口 | v1 |
 
 ## 接口参考
 
--  时序数据库 TSDB 数据接口
+### 时序数据库 TSDB
+
+- 数据接口
 
 ```php
 $data_client = new \Dzgrief\Bce\Services\Tsdb\DataClient($signer, $tsdb_name);
-$data_client->setDataPoints($datapoints);
-$data_client->getMetrics();
-$data_client->getTags($metric, $parameters = []);
-$data_client->getDataPoints($parameters = []);
-$data_client->getFields($metric);
-$data_client->export($path = '', $parameters = []);
+$data_client->setDataPoints(datapoints);
+$data_client->getMetrics(parameters);
+$data_client->getTags(metric, parameters);
+$data_client->getDataPoints(parameters);
+$data_client->getFields(metric);
+$data_client->export(path, parameters);
 ```
 
-- 时序数据库 TSDB 管理接口
+- 管理接口
 
 ```php
 $management_client = new \Dzgrief\Bce\Services\Tsdb\ManagementClient($signer);
-$management_client->getDatabase($id);
+$management_client->getDatabase(id);
 $management_client->getDatabases();
 ```
+
+### Iot Hub
+
+- Endpoint
+
+```php
+$endpoint_client = new \Dzgrief\Bce\Services\IotHub\EndpointClient($signer);
+$endpoint_client->getEndpoints(parameters);
+$endpoint_client->getEndpoint(endpoint);
+$endpoint_client->setEndpoint(endpoint);
+$endpoint_client->unsetEndpoint(endpoint);
+```
+
+- Thing
+
+```php
+$thing_client = new \Dzgrief\Bce\Services\IotHub\ThingClient($signer);
+$thing_client->getThings(endpoint, parameters);
+$thing_client->getThing(endpoint, thing);
+$thing_client->setThing(endpoint, thing);
+$thing_client->unsetThing(endpoint, thing);
+```
+
+- Principal
+
+```php
+$principal_client = \Dzgrief\Bce\Services\IotHub\PrincipalClient($signer);
+$principal_client->getPrincipals(endpoint);
+$principal_client->getPrincipal(endpoint, principal);
+$principal_client->setPrincipal(endpoint, principal);
+$principal_client->resetPassword(endpoint, principal);
+$principal_client->unsetPrincipal(endpoint, principal);
+```
+
+- Policy
+
+```php
+$policy_client = \Dzgrief\Bce\Services\IotHub\PolicyClient($signer);
+$policy_client->getPolicies(endpoint, principal, parameters);
+$policy_client->getPolicy(endpoint, policy);
+$policy_client->setPolicy(endpoint, policy);
+$policy_client->unsetPolicy(endpoint, policy);
+```
+
+- Permission
+
+```php
+$permission_client = \Dzgrief\Bce\Services\IotHub\PermissionClient($signer);
+$permission_client->getPermissions(endpoint, policy, parameters);
+$permission_client->getPermission(endpoint, permission_uuid);
+$permission_client->setPermission(endpoint, policy, operations, topic);
+$permission_client->updatePermission(endpoint, permission_uuid, operations, topic);
+$permission_client->unsetPermission(endpoint, permission_uuid);
+```
+
+- 认证
+
+```php
+$authentication_client = \Dzgrief\Bce\Services\IotHub\AuthenticationClient($signer);
+$authentication_client->authenticate(username, password);
+$authentication_client->authorize(principal_uuid, action, topic);
+```
+
+- 动作
+
+```php
+$action_client = \Dzgrief\Bce\Services\IotHub\ActionClient($signer);
+$action_client->unsetPrincipal(endpoint, thing_name, principal);
+$action_client->setPrincipal(endpoint, thing_name, principal);
+$action_client->setPolicy(endpoint, principal, policy);
+$action_client->unsetPolicy(endpoint, principal, policy);
+```
+
+- Client
+
+```php
+$client = \Dzgrief\Bce\Services\IotHub\Client($signer);
+$client->isOnline(endpoint, client_id);
+$client->isOnlines(endpoint, client_ids);
+```
+
+- MQTT Client
+
+```php
+$mqtt_client = \Dzgrief\Bce\Services\IotHub\MqttClient($username, $password);
+$mqtt_client->publishMessage(message, qos, topic, retain);
+```
+
+- 使用量
+
+```php
+$amount_client = \Dzgrief\Bce\Services\IotHub\AmountClient($signer);
+$amount_client->getUsage();
+$amount_client->getUsageByEndpoint(endpoint);
+$amount_client->getUsageByQuery(endpoint, start_date, end_date);
+```
    
-- 详细参数参考
-    - [百度时序数据库 TSDB 数据接口文档](https://cloud.baidu.com/doc/TSDB/API.html#.E6.95.B0.E6.8D.AEAPI.E6.8E.A5.E5.8F.A3.E8.AF.B4.E6.98.8E)
-    - [百度时序数据库 TSDB 管理接口文档](https://cloud.baidu.com/doc/TSDB/API.html#.E7.AE.A1.E7.90.86API.E6.8E.A5.E5.8F.A3.E8.AF.B4.E6.98.8E)
+### 详细参数参考
+
+- [百度时序数据库 TSDB 接口文档](https://cloud.baidu.com/doc/TSDB/API.html)
+- [百度物接入 IotHub 接口文档](https://cloud.baidu.com/doc/IOT/API.html)
 
 ## 代码许可
 
