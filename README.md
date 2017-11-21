@@ -64,16 +64,17 @@ var_dump($tags);
 | :-------- | :-------- |
 | 时序数据库 TSDB 数据接口 | v1 |
 | 时序数据库 TSDB 管理接口 | v1 |
-| 物接入 IotHub Endpoint 接口 | v1 |
-| 物接入 IotHub Thing 接口 | v1 |
-| 物接入 IotHub Principal 接口 | v1 |
-| 物接入 IotHub Policy 接口 | v1 |
-| 物接入 IotHub Permission 接口 | v1 |
-| 物接入 IotHub 认证接口 | v1 |
-| 物接入 IotHub 动作接口 | v1 |
-| 物接入 IotHub Client 接口 | v2 |
-| 物接入 IotHub MQTT Client 接口 | v1 |
-| 物接入 IotHub 使用量接口 | v1 |
+| 物接入 Iot Hub Endpoint 接口 | v1 |
+| 物接入 Iot Hub Thing 接口 | v1 |
+| 物接入 Iot Hub Principal 接口 | v1 |
+| 物接入 Iot Hub Policy 接口 | v1 |
+| 物接入 Iot Hub Permission 接口 | v1 |
+| 物接入 Iot Hub 认证接口 | v1 |
+| 物接入 Iot Hub 动作接口 | v1 |
+| 物接入 Iot Hub Client 接口 | v2 |
+| 物接入 Iot Hub MQTT Client 接口 | v1 |
+| 物接入 Iot Hub 使用量接口 | v1 |
+| 规则引擎 Rule Engine 接口 | v1 |
 
 ## 接口参考
 
@@ -195,10 +196,26 @@ $amount_client->getUsageByEndpoint(endpoint);
 $amount_client->getUsageByQuery(endpoint, start_date, end_date);
 ```
    
+### Rule Engine
+
+```
+$rule_engine_client = \Dzgrief\Bce\Services\RuleEngine\RuleEngineClient($signer);
+$rule_engine_client->setRule(parameters);
+$rule_engine_client->getRules(page_no, page_size);
+$rule_engine_client->setDestination(rule_uuid, kind, value);
+$rule_engine_client->unsetDestination(destination_uuid);
+$rule_engine_client->getRule(rule_uuid);
+$rule_engine_client->updateRule(rule_uuid, parameters);
+$rule_engine_client->unsetRules(rule_uuids);
+$rule_engine_client->disableRule(rule_uuid);
+$rule_engine_client->enableRule(rule_uuid);
+```
+
 ### 详细参数参考
 
 - [百度时序数据库 TSDB 接口文档](https://cloud.baidu.com/doc/TSDB/API.html)
-- [百度物接入 IotHub 接口文档](https://cloud.baidu.com/doc/IOT/API.html)
+- [百度物接入 Iot Hub 接口文档](https://cloud.baidu.com/doc/IOT/API.html)
+- [规则引擎 Rule Engine 接口文档](https://cloud.baidu.com/doc/RE/API.html)
 
 ## 代码许可
 
