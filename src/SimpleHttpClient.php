@@ -26,7 +26,7 @@ class SimpleHttpClient
     public function request($method, $host, $uri, $options = [])
     {
         $method = strtoupper($method);
-        $response = $this->http_client->request($method, 'https://' . $host . $uri, $options);
+        $response = $this->http_client->request($method, 'http://' . $host . $uri, $options);
         $content_types = $response->getHeader('Content-Type');
 
         foreach ($content_types as $key => $content_type) {
